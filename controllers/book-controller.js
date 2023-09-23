@@ -16,6 +16,7 @@ exports.createBook = async (req, res, next) => {
     ...bookObject,
     userId: req.auth.userId,
     imageUrl: `${req.protocol}://${req.get('host')}/${filename}`, // Générer l'URL de l'image
+    // imageUrl: `http://apimvg.kevinbret.fr/images/${filename}`, // Générer l'URL de l'image sur l'api en ligne
   });
   // Enregistrement dans la base de données
   book
@@ -35,9 +36,10 @@ exports.modifyBook = async (req, res, next) => {
   if (req.file) filename = await sharpConfig.optimizeImage(req.file); // on l'optimise
   const bookObject = req.file // si la requette contient un fichier ...
     ? {
-        ...JSON.parse(req.body.book), // on recupere notre objet en parsant la chaine de caractere
-        imageUrl: `${req.protocol}://${req.get('host')}/${filename}`,
-      }
+      ...JSON.parse(req.body.book), // on recupere notre objet en parsant la chaine de caractere
+      imageUrl: `${req.protocol}://${req.get('host')}/${filename}`,
+      // imageUrl: `http://apimvg.kevinbret.fr/images/${filename}`, // Générer l'URL de l'image sur l'api en ligne
+    }
     : { ...req.body };
 
   delete bookObject._userId;
